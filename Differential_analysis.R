@@ -11,7 +11,8 @@ source("./R/Seurat_functions.R")
 #==3.1 Compare TSNE vs TItSNE =====
 # Rename ident
 lnames = load(file = "./data/mouse_3eyes_alignment.Rda")
-lnames = load(file = "./data/mouse_3eyes_FIt-SNE.Rda")
+lnames = load(file = "./data/mouse_3eyes_cluster_3.Rda")
+lnames
 # rename mouse_3eyes ======
 table(mouse_3eyes@ident)
 idents <- as.data.frame(table(mouse_3eyes@ident))
@@ -38,8 +39,8 @@ mouse_3eyes@ident <- plyr::mapvalues(x = mouse_3eyes@ident,
 table(mouse_3eyes@ident)
 
 # rename mouse_3eyes_FItSNE ======
-table(mouse_3eyes_FItSNE@ident)
-idents <- as.data.frame(table(mouse_3eyes_FItSNE@ident))
+table(mouse_3eyes_cluster_3@ident)
+idents <- as.data.frame(table(mouse_3eyes_cluster_3@ident))
 old.ident.ids2 <- idents$Var1
 new.cluster.ids2 <- c("Pericytes",
                      "Mesenchymal cells",
@@ -76,24 +77,24 @@ new.cluster.ids2 <- c("Pericytes",
                      "Melanocytes",
                      "Monocytes & NK cells",
                      "Schwann cells")
-mouse_3eyes_FItSNE@ident <- plyr::mapvalues(x = mouse_3eyes_FItSNE@ident,
+mouse_3eyes_cluster_3@ident <- plyr::mapvalues(x = mouse_3eyes_cluster_3@ident,
                                             from = old.ident.ids2,
                                             to = new.cluster.ids2)
-table(mouse_3eyes_FItSNE@ident)
+table(mouse_3eyes_cluster_3@ident)
 #====CD 34 =======
 p1 <- SingleFeaturePlot.1(object = mouse_3eyes, feature = "Cd34", 
                           reduction.use = "tsne",
                           do.return = TRUE, 
                           cols.use = c("lightgrey","blue"), pt.size = 0.5) + 
-        ggtitle("Cd34 in TSNE plot") + 
+        ggtitle("Cd34 in TSNE plot resolution 0.8") + 
         theme(text = element_text(size=20),     #larger text including legend title							
               plot.title = element_text(hjust = 0.5)) #title in middle
 
-p2 <- SingleFeaturePlot.1(object = mouse_3eyes_FItSNE, feature = "Cd34", 
-                          reduction.use = "FItSNE",
+p2 <- SingleFeaturePlot.1(object = mouse_3eyes_cluster_3, feature = "Cd34", 
+                          reduction.use = "tsne",
                           do.return = TRUE, 
                           cols.use = c("lightgrey","blue"), pt.size = 0.5) + 
-        ggtitle("Cd34 in FItSNE plot") + 
+        ggtitle("Cd34 in TSNE plot resolution 3") + 
         theme(text = element_text(size=20),     #larger text including legend title							
               plot.title = element_text(hjust = 0.5)) #title in middle
 plot_grid(p1, p2)

@@ -95,11 +95,14 @@ mouse_3eyes <- ScaleData(object = mouse_3eyes, genes.use = genes.use, display.pr
 mouse_3eyes <- AlignSubspace(object = mouse_3eyes, grouping.var = "conditions", 
                         dims.align = 1:15)
 #Now we can run a single integrated analysis on all cells!
-mouse_3eyes <- FindClusters(object = mouse_3eyes, reduction.type = "cca.aligned", dims.use = 1:15, 
-                       resolution = 0.8, force.recalc = TRUE, save.SNN = TRUE)
+mouse_3eyes <- FindClusters(object = mouse_3eyes, reduction.type = "cca.aligned", 
+                            dims.use = 1:15, 
+                            resolution = 0.8, force.recalc = TRUE, save.SNN = TRUE)
 mouse_3eyes <- RunTSNE(object = mouse_3eyes, reduction.use = "cca.aligned", dims.use = 1:15, 
-                  dim.embed = 2, do.fast = TRUE)
-mouse_3eyes <- RunPCA(object = mouse_3eyes, pc.genes = mouse_3eyes@var.genes,pcs.compute = 30, do.fast = TRUE)
+                       dim.embed = 2, do.fast = TRUE)
+mouse_3eyes <- RunPCA(object = mouse_3eyes, pc.genes = mouse_3eyes@var.genes,
+                      pcs.compute = 30, do.fast = TRUE)
+
 VizPCA(object = mouse_3eyes, pcs.use = 1:2)
 p1 <- TSNEPlot(mouse_3eyes, do.return = T, pt.size = 1, group.by = "conditions")
 p2 <- TSNEPlot(mouse_3eyes, do.label = F, do.return = T, pt.size = 1)
@@ -114,7 +117,7 @@ plot_grid(p4, p5)
 TSNEPlot(object = mouse_3eyes,do.label = TRUE, group.by = "ident", 
          do.return = TRUE, no.legend = TRUE,
          pt.size = 1,label.size = 8 )+
-        ggtitle("TSEN Plot of all clusters")+
+        ggtitle("TSNE Plot of all clusters")+
         theme(text = element_text(size=20),     #larger text including legend title							
               plot.title = element_text(hjust = 0.5)) #title in middle
 #dev.off()
@@ -146,7 +149,6 @@ do.call(plot_grid, p)
 #======1.6 Further subdivisions with FIt-SNE =======================
 lnames = load(file = "./data/mouse_3eyes_alignment.Rda")
 lnames
-
 mouse_3eyes_FItSNE <- FindVariableGenes(object = mouse_3eyes, mean.function = ExpMean, dispersion.function = LogVMR, 
                          do.plot = FALSE)
 hv.genes <- head(rownames(mouse_3eyes_FItSNE@hvg.info), 1000)
@@ -154,12 +156,15 @@ mouse_3eyes_FItSNE <- RunPCA(object = mouse_3eyes_FItSNE, pc.genes = hv.genes, p
               pcs.print = 1:5, genes.print = 5)
 PCElbowPlot(object = mouse_3eyes_FItSNE, num.pc = 100)
 PCHeatmap(mouse_3eyes_FItSNE, pc.use = c(1:3,73:75), cells.use = 500, do.balanced = TRUE)
-mouse_3eyes_FItSNE <- FindClusters(object = mouse_3eyes_FItSNE, reduction.type = "pca", dims.use = 1:75, resolution = 3, 
-                    save.SNN = TRUE, n.start = 10, nn.eps = 0.5, print.output = FALSE)
+mouse_3eyes_FItSNE <- FindClusters(object = mouse_3eyes_FItSNE, reduction.type = "pca", dims.use = 1:75, resolution = 0.8, 
+                                   save.SNN = TRUE, n.start = 10, nn.eps = 0.5, print.output = FALSE)
+
 mouse_3eyes_FItSNE <- RunTSNE(object = mouse_3eyes_FItSNE, reduction.use = "pca", dims.use = 1:75, tsne.method = "FIt-SNE", 
-               nthreads = 4, reduction.name = "FItSNE", reduction.key = "FItSNE_", 
-               fast_tsne_path = "/Users/yah2014/src/FIt-SNE/bin/fast_tsne", 
-               max_iter = 2000)
+                              nthreads = 4, reduction.name = "FItSNE", reduction.key = "FItSNE_", 
+                              fast_tsne_path = "/Users/yah2014/src/FIt-SNE/bin/fast_tsne", 
+                              max_iter = 2000)
+
+
 library(cowplot)
 p1 <- DimPlot(object = mouse_3eyes_FItSNE, reduction.use = "FItSNE", 
               no.legend = TRUE, do.return = TRUE, do.label = TRUE,
