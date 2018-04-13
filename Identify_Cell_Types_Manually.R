@@ -90,9 +90,7 @@ new.cluster.ids <- c("Mesenchymal cells 0",
 mouse_3eyes@ident <- plyr::mapvalues(x = mouse_3eyes@ident,
                                from = old.ident.ids,
                                to = new.cluster.ids)
-DotPlot(mouse_3eyes, genes.plot = rev(markers.to.plot),
-        cols.use = c("blue","red"), x.lab.rot = T, plot.legend = F,
-        dot.scale = 8, do.return = T)
+
 #===================================================
 # mouse_3eyes <- RenameIdentBack(mouse_3eyes)
 # How many cells are in each cluster
@@ -102,21 +100,21 @@ table(mouse_3eyes@ident)
 idents <- as.data.frame(table(mouse_3eyes@ident))
 old.ident.ids <- idents$Var1
 new.cluster.ids <- c("Mesenchymal cells",
-                     "Retinal Pigment\n Epithelium",
+                     "Retinal Pigment Epithelium",
                      "Pericytes",
                      "Smooth muscle cells",
                      "Endothelial cells",
                      "Endothelial cells",
-                     "Retinal Pigment\n Epithelium",
+                     "Retinal Pigment Epithelium",
                      "Endothelial cells",
                      "Mesenchymal cells",
                      "Endothelial cells",
-                     "Myelinating\n Schwann cells",
+                     "Myelinating Schwann cells",
                      "Monocytes",
                      "Monocytes",
                      "T cells",
                      "Melanocytes",
-                     "Myelinating\n Schwann cells")
+                     "Myelinating Schwann cells")
 mouse_3eyes@ident <- plyr::mapvalues(x = mouse_3eyes@ident,
                                      from = old.ident.ids,
                                      to = new.cluster.ids)
@@ -127,7 +125,14 @@ TSNEPlot(object = mouse_3eyes, no.legend = F, do.label = TRUE,
         theme(text = element_text(size=20),     #larger text including legend title							
               legend.position="none",
               plot.title = element_text(hjust = 0.5)) #title in middle
-
+markers.to.plot <- c(Melanocytes,Hematopoietic[1:2], Lymphoid[1:2],
+                     Myeloid[c(8,10)],Myelinating_Schwann_cells,Endothelium[c(1:3,5,7)], 
+                     Stem_cell[c(5,3)],Mesenchymal[4],Pericytes[c(1,4,6:9)],
+                     Smooth_muscle_cells,RPE)
+markers.to.plot <- unique(markers.to.plot)
+DotPlot(mouse_3eyes, genes.plot = rev(markers.to.plot),
+        cols.use = c("blue","red"), x.lab.rot = T, plot.legend = F,
+        dot.scale = 8, do.return = T)
 #=====2.2 - A table with the number of cells of each cluster and subcluster, for both B6 and 129_B6 strains.
 # We can also compare proportional shifts in the data. As can be seen in the barplot, 
 freq_table <- prop.table(x = table(mouse_3eyes@ident, mouse_3eyes@meta.data[, "conditions"]), 
@@ -271,7 +276,14 @@ DotPlot(mouse_3eyes_cluster_3, genes.plot = rev(markers.to.plot),
         cols.use = c("blue","red"), x.lab.rot = T, plot.legend = F,
         dot.scale = 8, do.return = T)
 
-
+markers.to.plot <- c(Melanocytes,Hematopoietic[1:2], Lymphoid[1:2],
+                     Myeloid[c(8,10)],Myelinating_Schwann_cells,Endothelium[c(1:3,5,7)], 
+                     Stem_cell[c(5,3)],Mesenchymal[4],Pericytes[c(1,4,6:9)],
+                     Smooth_muscle_cells,RPE)
+markers.to.plot <- unique(markers.to.plot)
+DotPlot(mouse_3eyes_cluster_3, genes.plot = rev(markers.to.plot),
+        cols.use = c("blue","red"), x.lab.rot = T, plot.legend = F,
+        dot.scale = 8, do.return = T)
 #======2.6 Further subdivisions find cell type with dotplot=======================
 lnames = load(file = "./data/mouse_3eyes_cluster_3.Rda")
 lnames
@@ -326,7 +338,15 @@ TSNEPlot(object = mouse_3eyes_cluster_3, no.legend = F, do.label = TRUE,
         theme(text = element_text(size=20),     #larger text including legend title							
               legend.position="none",
               plot.title = element_text(hjust = 0.5)) #title in middle
-Ihh <- Stromal_fibroblasts <- MouseGenes(mouse_3eyes_cluster_3,c("Ihh"))
+markers.to.plot <- c(Endothelium[c(1:3,5,7)], 
+                     Stem_cell[c(5,3)],RPE,Mesenchymal[4],Pericytes[c(1,4,6:9)],
+                     Smooth_muscle_cells,Melanocytes,Hematopoietic[1:2], Lymphoid[c(1:2,8)],
+                     Myeloid[c(8,10)],Myelinating_Schwann_cells)
+markers.to.plot <- unique(markers.to.plot)
+DotPlot(mouse_3eyes_cluster_3, genes.plot = rev(markers.to.plot),
+        cols.use = c("blue","red"), x.lab.rot = T, plot.legend = F,
+
+        dot.scale = 8, do.return = T)
 # Featureplot
 FeaturePlot(object = mouse_3eyes_cluster_3,reduction.use = "tsne",
                          features.plot = Ihh, min.cutoff = NA, 
