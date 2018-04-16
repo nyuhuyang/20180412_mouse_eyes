@@ -35,7 +35,7 @@ mouse_3eyes_list <- lapply(mouse_3eyes_raw, CreateSeuratObject,
                       project = "DropSeq")
 mouse_3eyes_list <- lapply(mouse_3eyes_list, FilterCells, 
                       subset.names = "nGene", 
-                      low.thresholds = 200, 
+                      low.thresholds = 500, 
                       high.thresholds = Inf)
 mouse_3eyes_list <- lapply(mouse_3eyes_list, NormalizeData)
 mouse_3eyes_list <- lapply(mouse_3eyes_list, FindVariableGenes, do.plot = FALSE)
